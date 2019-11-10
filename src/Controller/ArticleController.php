@@ -11,16 +11,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", name="app_homepage")
      * @return Response
      */
     public function homepage()
     {
-        return new Response('Test s');
+        return $this->render('article/homepage.html.twig');
     }
 
     /**
-     * @Route("/article/{slug}")
+     * @Route("/article/{slug}", name="app_article_show")
      * @param $slug
      * @return Response
      */
@@ -34,7 +34,18 @@ class ArticleController extends AbstractController
 
         return $this->render('article/show.html.twig', [
             'title' => ucfirst(str_replace('-', ' ', $slug)),
-            'comments' => $comments
+            'slug' => $slug,
+            'comments' => $comments,
         ]);
+    }
+
+    /**
+     * @Route("/article/{slug}/like", name="like_article", methods={"POST"})
+     * @param $slug
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function likeArticle($slug)
+    {
+        return $this->json(['hearts' => rand(5, 100)]);
     }
 }
